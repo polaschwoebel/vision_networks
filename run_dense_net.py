@@ -3,6 +3,8 @@ import argparse
 from models.dense_net import DenseNet
 from data_providers.utils import get_data_provider_by_name
 
+import os 
+
 train_params_cifar = {
     'batch_size': 64,
     'n_epochs': 300,
@@ -109,10 +111,14 @@ if __name__ == '__main__':
         '--num_intra_threads', '-intra', type=int, default=128, metavar='',
         help='number of intra threads for inference / test')
     
-    
+    parser.add_argument(
+           '--GPU', type=str,
+           help='which GPU to run on')
+
     parser.set_defaults(renew_logs=True)
 
     args = parser.parse_args()
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.GPU
 
     if not args.keep_prob:
         if args.dataset in ['C10', 'C100', 'SVHN']:
